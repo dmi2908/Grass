@@ -7,37 +7,31 @@ import java.io.IOException;
 
 public class Grass {
     static int width = 800, height = 600;
+    static int size = 50;
     static JFrame frame = new JFrame();
-    static int x = 0;
-    static int y = 0;
 
     public static void main(String[] args) throws IOException {
-        BufferedImage image = ImageIO.read(new File("./image/grass.jpg"));
+        BufferedImage image = ImageIO.read(new File("./image/grass.jpg")).getSubimage(0,0,size,size);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setTitle("Растет трава у дома");
-        frame.setBounds(x,y,width, height);
+        Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+        frame.setBounds(dim.width / 2 - width / 2, dim.height / 2 - height / 2, width, height);
         frame.getContentPane().setLayout(null);
         frame.getContentPane().setBackground(Color.black);
-        frame.setVisible(true);
-        while (x <= width) {
-            JLabel label = new JLabel(new ImageIcon(image));
-            label.setBounds(x,y,image.getWidth(),image.getHeight());
-            System.out.println("check x1::: " + x);
-            System.out.println("check y1::: " + y);
-            frame.add(label);
-            x +=50;
-            if (x >= width) {
-                
+        for (int i = 0; i < width/size; i++){
+            for (int j = 0; j < height/size; j++){
+                new GrowGrass(image, i, j);
             }
-//            switch (x) {
-//                case 800:
-//                    System.out.println("check x2::: " + x);
-//                    label.setBounds(x,y,image.getWidth(),image.getHeight());
-//                    frame.add(label);
-//                    y += 50;
-//                    x = 0;
-//                    break;
-//            }
+        }
+        frame.setVisible(true);
+    }
+
+    public static class GrowGrass {
+        public JLabel l;
+        public GrowGrass(BufferedImage im, int i, int j) {
+            l = new JLabel(new ImageIcon(im));
+            l.setBounds(i*size, j*size, size, size);
+            frame.add(l);
         }
     }
 }
